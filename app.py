@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify, session
 import requests as external_requests
 import os
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app, origins=["https://funnychatbot.netlify.app"], supports_credentials=True)
 app.secret_key = "your-secret-key"
 
 # Get OpenRouter API Key from env
