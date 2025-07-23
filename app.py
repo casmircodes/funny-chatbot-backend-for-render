@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.secret_key = "your-secret-key"
 
 # 🔑 Your API Key
-OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
+#OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 REFERER = "https://yourdomain.com"
 SITE_NAME = "My Chatbot"
 
