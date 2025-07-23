@@ -43,7 +43,7 @@ def chat():
         response = external_requests.post(
             url="https://openrouter.ai/api/v1/chat/completions",
             headers={
-                "Authorization": f"Bearer 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",
+                "Authorization": f"Bearer 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",
                 "Content-Type": "application/json",
                 "HTTP-Referer": SITE_URL,
                 "X-Title": SITE_NAME,
