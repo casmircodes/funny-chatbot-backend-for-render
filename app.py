@@ -1,72 +1,73 @@
-from flask import Flask, request, jsonify, session
-import requests as external_requests
-import os
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-
+import requests
+import json
+import os
 
 app = Flask(__name__)
-#CORS(app, origins=["https://funnychatbot.netlify.app"], supports_credentials=True)
-CORS(app)
-app.secret_key = "your-secret-key"
+CORS(app, origins=["https://your-frontend-site.netlify.app"])  # Replace with your frontend domain
 
-# Get OpenRouter API Key from env
-#OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-SITE_URL = "https://yourfrontend.com"
+# 🔐 API Key and Metadata
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
+REFERER = "https://your-frontend-site.netlify.app"
 SITE_NAME = "Brandice AI"
-MODEL = "google/gemma-3-27b-it:free"
 
-# System prompt (you can change this from backend)
+# 🧠 System Prompt
 SYSTEM_PROMPT = {
     "role": "system",
-    "content": "You are Brandice AI, a helpful and witty assistant."
+    "content": "From now on you are a funny and sarcastic extrovert chatbot. Always be consistent with your sarcasm. Your maximum reply is 50 words"
 }
-
-'''
-@app.route("/")
-def index():
-    session["chat_history"] = [SYSTEM_PROMPT]  # Clear history on refresh
-    return render_template("index.html")
-'''
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json()
-    user_message = data.get("message")
-
-    if "chat_history" not in session:
-        session["chat_history"] = [SYSTEM_PROMPT]
-
-    # Append user's message
-    session["chat_history"].append({"role": "user", "content": user_message})
-
-    # Call OpenRouter API
     try:
-        response = external_requests.post(
-            url="https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer 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",
-                "Content-Type": "application/json",
-                "HTTP-Referer": SITE_URL,
-                "X-Title": SITE_NAME,
-            },
-            json={
-                "model": MODEL,
-                "messages": session["chat_history"]
-            }
+        data = request.get_json()
+        user_input = data.get("user_input", "")
+        history = data.get("history", [])
+
+        if not history:
+            history = [SYSTEM_PROMPT]
+
+        history.append({
+            "role": "user",
+            "content": [{"type": "text", "text": user_input}]
+        })
+
+        payload = {
+            "model": "google/gemma-3-27b-it:free",
+            "messages": history
+        }
+
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": REFERER,
+            "X-Title": SITE_NAME
+        }
+
+        response = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers=headers,
+            data=json.dumps(payload)
         )
 
-        result = response.json()
-        reply = result["choices"][0]["message"]["content"]
+        response_data = response.json()
+        ai_reply = response_data["choices"][0]["message"]
 
-        # Save bot reply in session
-        session["chat_history"].append({"role": "assistant", "content": reply})
-
-        return jsonify({"reply": reply})
+        # Return both reply and updated history
+        history.append(ai_reply)
+        return jsonify({
+            "reply": ai_reply["content"],
+            "history": history
+        })
 
     except Exception as e:
         print("Error:", e)
-        return jsonify({"reply": "Oops! Something went wrong. Please try again."}), 500
+        return jsonify({"reply": "Something went wrong", "history": []})
 
+@app.route("/", methods=["GET"])
+def health_check():
+    return jsonify({"status": "API is live"})
 
 if __name__ == "__main__":
     app.run(debug=True)
