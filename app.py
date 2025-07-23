@@ -5,7 +5,8 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
-CORS(app, origins=["https://funnychatbot.netlify.app"], supports_credentials=True)
+#CORS(app, origins=["https://funnychatbot.netlify.app"], supports_credentials=True)
+CORS(app)
 app.secret_key = "your-secret-key"
 
 # Get OpenRouter API Key from env
