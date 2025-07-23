@@ -1,76 +1,68 @@
-from flask import Flask, request, jsonify, session
-import requests
-import json
+from flask import Flask, render_template, request, jsonify, session
+import requests as external_requests
 import os
 
 app = Flask(__name__)
 app.secret_key = "your-secret-key"
 
-# 🔑 Your API Key
-#OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
-REFERER = "https://yourdomain.com"
-SITE_NAME = "My Chatbot"
+# Get OpenRouter API Key from env
+#OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+SITE_URL = "https://yourfrontend.com"
+SITE_NAME = "Brandice AI"
+MODEL = "google/gemma-3-27b-it:free"
 
-# 🎓 System Prompt
+# System prompt (you can change this from backend)
 SYSTEM_PROMPT = {
     "role": "system",
-    "content": "From now on you are an funny and sarcastic extrovert chatbot. Always be consistent with your sarcasm. Your maximum reply is 50 words"
+    "content": "You are Brandice AI, a helpful and witty assistant."
 }
+
 
 @app.route("/")
 def index():
-    # 🔄 Clear chat history on every refresh
-    session["chat_history"] = [SYSTEM_PROMPT]
+    session["chat_history"] = [SYSTEM_PROMPT]  # Clear history on refresh
     return render_template("index.html")
 
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    user_input = request.form.get("user_input")
+    data = request.get_json()
+    user_message = data.get("message")
 
     if "chat_history" not in session:
         session["chat_history"] = [SYSTEM_PROMPT]
 
-    # Add user message
-    session["chat_history"].append({
-        "role": "user",
-        "content": [{"type": "text", "text": user_input}]
-    })
+    # Append user's message
+    session["chat_history"].append({"role": "user", "content": user_message})
 
-    payload = {
-        "model": "google/gemma-3-27b-it:free",
-        "messages": session["chat_history"]
-    }
-
-    headers = {
-        "Authorization": f"Bearer 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",
-        "Content-Type": "application/json",
-        "HTTP-Referer": REFERER,
-        "X-Title": SITE_NAME
-    }
-
+    # Call OpenRouter API
     try:
-        response = requests.post(
+        response = external_requests.post(
             url="https://openrouter.ai/api/v1/chat/completions",
-            headers=headers,
-            data=json.dumps(payload)
+            headers={
+                "Authorization": f"Bearer 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",
+                "Content-Type": "application/json",
+                "HTTP-Referer": SITE_URL,
+                "X-Title": SITE_NAME,
+            },
+            json={
+                "model": MODEL,
+                "messages": session["chat_history"]
+            }
         )
-        response_data = response.json()
-        ai_message = response_data['choices'][0]['message']
 
-        # Add assistant reply
-        session["chat_history"].append(ai_message)
-        session.modified = True
+        result = response.json()
+        reply = result["choices"][0]["message"]["content"]
 
-        return jsonify({"reply": ai_message['content']})
+        # Save bot reply in session
+        session["chat_history"].append({"role": "assistant", "content": reply})
+
+        return jsonify({"reply": reply})
+
     except Exception as e:
         print("Error:", e)
-        return jsonify({"reply": "Sorry, something went wrong!"})
+        return jsonify({"reply": "Oops! Something went wrong. Please try again."}), 500
 
-@app.route("/reset", methods=["POST"])
-def reset_chat():
-    session["chat_history"] = [SYSTEM_PROMPT]
-    return jsonify({"message": "Chat history cleared."})
 
 if __name__ == "__main__":
     app.run(debug=True)
