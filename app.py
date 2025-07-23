@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, request, jsonify, session
 import requests as external_requests
 import os
 
@@ -17,12 +17,12 @@ SYSTEM_PROMPT = {
     "content": "You are Brandice AI, a helpful and witty assistant."
 }
 
-
+'''
 @app.route("/")
 def index():
     session["chat_history"] = [SYSTEM_PROMPT]  # Clear history on refresh
     return render_template("index.html")
-
+'''
 
 @app.route("/chat", methods=["POST"])
 def chat():
