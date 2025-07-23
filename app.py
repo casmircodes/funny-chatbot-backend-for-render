@@ -5,7 +5,7 @@ import json
 import os
 
 app = Flask(__name__)
-CORS(app, origins=["https://your-frontend-site.netlify.app"])  # Replace with your frontend domain
+CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your frontend domain
 
 # 🔐 API Key and Metadata
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
