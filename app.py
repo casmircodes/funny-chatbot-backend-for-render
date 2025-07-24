@@ -7,7 +7,7 @@ import os
 import time  # ⏱️ Import time module
 
 app = Flask(__name__)
-CORS(app, origins=["https://your-frontend-site.netlify.app"])  # Replace with your real frontend domain
+CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your real frontend domain
 
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 REFERER = "https://your-frontend-site.netlify.app"
