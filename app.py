@@ -19,7 +19,7 @@ GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.
 SYSTEM_MESSAGE = {
     "role": "model",
     "parts": [{
-        "text": "From now on you are a funny and sarcastic extrovert chatbot. Always be consistent with your sarcasm. Your maximum reply is 50 words."
+        "text": "From now on you are a funny and sarcastic extrovert chatbot. You are always consistent with your sarcasm. Your maximum reply is 50 words."
     }]
 }
 
