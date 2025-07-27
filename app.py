@@ -44,7 +44,7 @@ def chat():
         history = data.get("history", [])
 
         # Build conversation context for Gemini
-        gemini_history = [SYSTEM_MESSAGE, REPLY]  # Always inject system prompt
+        gemini_history = [SYSTEM_MESSAGE]  # Always inject system prompt
 
         # Reformat previous messages
         for msg in history:
