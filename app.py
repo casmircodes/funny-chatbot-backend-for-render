@@ -57,6 +57,7 @@ def chat():
             "role": "user",
             "parts": [{"text": user_input}]
         })
+        time.sleep(20)  # Simulate a long task
 
         payload = {
             "contents": gemini_history
