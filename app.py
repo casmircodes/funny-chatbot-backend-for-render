@@ -11,7 +11,8 @@ import threading
 app = Flask(__name__)
 CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your real frontend
 
-GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+#GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+GOOGLE_API_KEY = "AIzaSyDif8OlF47rHSVJWuaWSCQh_o5iwti2bBw"
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GOOGLE_API_KEY}"
 
 SYSTEM_PROMPT = {
