@@ -1,4 +1,121 @@
 
+
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import requests
+import json
+import os
+import time
+import threading
+
+app = Flask(__name__)
+CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your frontend
+
+#GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+GOOGLE_API_KEY = "AIzaSyDif8OlF47rHSVJWuaWSCQh_o5iwti2bBw"
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GOOGLE_API_KEY}"
+
+# System prompt as first model message — Gemini doesn't have a 'system' role
+SYSTEM_MESSAGE = {
+    "role": "model",
+    "parts": [{
+        "text": "From now on you are a funny and sarcastic extrovert chatbot. Always be consistent with your sarcasm. Your maximum reply is 50 words."
+    }]
+}
+
+# 🔒 Shared lock to control access
+chat_lock = threading.Lock()
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    if not chat_lock.acquire(timeout=30):
+        return jsonify({"reply": "The server is busy. Please try again shortly.", "history": []}), 429
+
+    try:
+        data = request.get_json()
+        user_input = data.get("user_input", "")
+        history = data.get("history", [])
+
+        # Build conversation context for Gemini
+        gemini_history = [SYSTEM_MESSAGE]  # Always inject system prompt
+
+        # Reformat previous messages
+        for msg in history:
+            if msg["role"] == "user":
+                gemini_history.append({
+                    "role": "user",
+                    "parts": msg.get("content", [{"text": ""}])
+                })
+            elif msg["role"] == "model":
+                gemini_history.append({
+                    "role": "model",
+                    "parts": [{"text": msg.get("content", "")}]
+                })
+
+        # Add latest user input
+        gemini_history.append({
+            "role": "user",
+            "parts": [{"text": user_input}]
+        })
+
+        payload = {
+            "contents": gemini_history
+        }
+
+        headers = {
+            "Content-Type": "application/json"
+        }
+
+        response = requests.post(GEMINI_URL, headers=headers, data=json.dumps(payload))
+        response.raise_for_status()
+        response_data = response.json()
+
+        ai_text = response_data["candidates"][0]["content"]["parts"][0]["text"]
+
+        # Update history for the frontend to keep
+        history.append({
+            "role": "user",
+            "content": [{"text": user_input}]
+        })
+        history.append({
+            "role": "model",
+            "content": ai_text
+        })
+
+        return jsonify({
+            "reply": ai_text,
+            "history": history
+        })
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"reply": "Something went wrong", "history": []})
+
+    finally:
+        chat_lock.release()
+
+
+@app.route("/waiting", methods=["GET"])
+def waiting():
+    return jsonify({"status": "busy" if chat_lock.locked() else "ready"})
+
+
+@app.route("/", methods=["GET"])
+def health_check():
+    return jsonify({"status": "API is live"})
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+
+
+
+
+'''
 #This whole code uses gemini API unlike the preeviously comented one that uses openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -110,7 +227,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-
+'''
 
 
 
