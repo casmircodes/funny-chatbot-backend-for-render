@@ -64,6 +64,7 @@ def chat():
             "role": "user",
             "parts": [{"text": user_input}]
         })
+        print(gemini_history)
 
         payload = {
             "contents": gemini_history
