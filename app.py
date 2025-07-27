@@ -58,7 +58,7 @@ def chat():
             "parts": [{"text": user_input}]
         })
 
-        time.sleep(1)  # Optional delay to simulate thinking
+        time.sleep(20)  # Optional delay to simulate thinking
 
         payload = {
             "contents": gemini_history
