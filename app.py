@@ -9,13 +9,14 @@ import time
 import threading
 
 app = Flask(__name__)
-CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your real frontend
+CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your frontend
 
 #GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 GOOGLE_API_KEY = "AIzaSyDif8OlF47rHSVJWuaWSCQh_o5iwti2bBw"
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GOOGLE_API_KEY}"
 
-SYSTEM_PROMPT = {
+# System prompt as first model message — Gemini doesn't have a 'system' role
+SYSTEM_MESSAGE = {
     "role": "model",
     "parts": [{
         "text": "From now on you are a funny and sarcastic extrovert chatbot. Always be consistent with your sarcasm. Your maximum reply is 50 words."
@@ -27,7 +28,7 @@ chat_lock = threading.Lock()
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    if not chat_lock.acquire(timeout=30):  # Wait up to 30 seconds
+    if not chat_lock.acquire(timeout=30):
         return jsonify({"reply": "The server is busy. Please try again shortly.", "history": []}), 429
 
     try:
@@ -35,30 +36,27 @@ def chat():
         user_input = data.get("user_input", "")
         history = data.get("history", [])
 
-        # Format history for Gemini
-        gemini_history = []
-        if not history:
-            gemini_history.append(SYSTEM_PROMPT)
-        else:
-            for message in history:
-                if message["role"] == "user":
-                    gemini_history.append({
-                        "role": "user",
-                        "parts": message["content"]
-                    })
-                elif message["role"] == "model":
-                    gemini_history.append({
-                        "role": "model",
-                        "parts": [{"text": message["content"]}]
-                    })
+        # Build conversation context for Gemini
+        gemini_history = [SYSTEM_MESSAGE]  # Always inject system prompt
 
-        # Append new user message
+        # Reformat previous messages
+        for msg in history:
+            if msg["role"] == "user":
+                gemini_history.append({
+                    "role": "user",
+                    "parts": msg.get("content", [{"text": ""}])
+                })
+            elif msg["role"] == "model":
+                gemini_history.append({
+                    "role": "model",
+                    "parts": [{"text": msg.get("content", "")}]
+                })
+
+        # Add latest user input
         gemini_history.append({
             "role": "user",
             "parts": [{"text": user_input}]
         })
-
-        time.sleep(20)  # Optional delay to simulate thinking
 
         payload = {
             "contents": gemini_history
@@ -73,16 +71,16 @@ def chat():
         response_data = response.json()
 
         ai_text = response_data["candidates"][0]["content"]["parts"][0]["text"]
-        ai_reply = {
-            "role": "model",
-            "content": ai_text
-        }
 
+        # Update history for the frontend to keep
         history.append({
             "role": "user",
             "content": [{"text": user_input}]
         })
-        history.append(ai_reply)
+        history.append({
+            "role": "model",
+            "content": ai_text
+        })
 
         return jsonify({
             "reply": ai_text,
@@ -109,6 +107,7 @@ def health_check():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 
 
