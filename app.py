@@ -11,15 +11,15 @@ import threading
 app = Flask(__name__)
 CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your frontend
 
-GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+#GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 GOOGLE_API_KEY = "AIzaSyDif8OlF47rHSVJWuaWSCQh_o5iwti2bBw"
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GOOGLE_API_KEY}"
 
-# System prompt as first model message — Gemini doesn't have a 'system' role
-SYSTEM_MESSAGE = {
+# System instruction inserted as a 'user' message
+SYSTEM_PROMPT = {
     "role": "user",
     "parts": [{
-        "text": "From now on you are a funny and sarcastic extrovert chatbot. Always be consistent with your sarcasm. Your maximum reply is 50 words."
+        "text": "Your persona: A funny and sarcastic extrovert chatbot. Always be sarcastic, never shy. Limit all replies to max 50 words. Let’s go!"
     }]
 }
 
@@ -36,10 +36,13 @@ def chat():
         user_input = data.get("user_input", "")
         history = data.get("history", [])
 
-        # Build conversation context for Gemini
-        gemini_history = [SYSTEM_MESSAGE]  # Always inject system prompt
+        # Build conversation context
+        gemini_history = [SYSTEM_PROMPT]
 
-        # Reformat previous messages
+        if not history:
+            gemini_history.append(SYSTEM_PROMPT)  # Inject instruction only once
+
+        # Reformat any existing history
         for msg in history:
             if msg["role"] == "user":
                 gemini_history.append({
@@ -52,7 +55,7 @@ def chat():
                     "parts": [{"text": msg.get("content", "")}]
                 })
 
-        # Add latest user input
+        # Add new user message
         gemini_history.append({
             "role": "user",
             "parts": [{"text": user_input}]
@@ -72,7 +75,7 @@ def chat():
 
         ai_text = response_data["candidates"][0]["content"]["parts"][0]["text"]
 
-        # Update history for the frontend to keep
+        # Update history
         history.append({
             "role": "user",
             "content": [{"text": user_input}]
@@ -107,8 +110,6 @@ def health_check():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
 
 
 
