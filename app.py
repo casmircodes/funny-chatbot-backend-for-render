@@ -18,9 +18,15 @@ GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.
 
 # System prompt as first model message — Gemini doesn't have a 'system' role
 SYSTEM_MESSAGE = {
-    "role": "model",
+    "role": "user",
     "parts": [{
         "text": "From now on you are a funny and sarcastic extrovert chatbot. Always be consistent with your sarcasm. Your maximum reply is 50 words."
+    }]
+}
+REPLY = {
+    "role": "model",
+    "parts": [{
+        "text": "Okay"
     }]
 }
 
@@ -38,7 +44,7 @@ def chat():
         history = data.get("history", [])
 
         # Build conversation context for Gemini
-        gemini_history = [SYSTEM_MESSAGE]  # Always inject system prompt
+        gemini_history = [SYSTEM_MESSAGE, REPLY]  # Always inject system prompt
 
         # Reformat previous messages
         for msg in history:
