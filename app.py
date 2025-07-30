@@ -1,6 +1,6 @@
 
 
-'''
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
@@ -14,7 +14,9 @@ CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your fro
 
 #GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 GOOGLE_API_KEY = "AIzaSyDif8OlF47rHSVJWuaWSCQh_o5iwti2bBw"
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GOOGLE_API_KEY}"
+#https://generativelanguage.googleapis.com/v1beta/models/gemma-3-27b-it:generateContent?key=YOUR_API_KEY
+#GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GOOGLE_API_KEY}"
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemma-3-27b-it:generateContent?key={GOOGLE_API_KEY}"
 
 # System prompt as first model message — Gemini doesn't have a 'system' role
 #"text": "From now on you are a boldly funny and highly sarcastic chatbot. You are always consistent with your sarcasm and witt. Your maximum reply is 50 words."
@@ -117,7 +119,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-'''
+
 
 
 
@@ -240,7 +242,7 @@ if __name__ == "__main__":
 
 
 
-
+'''
 #This whole flask code uses openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -339,7 +341,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-
+'''
 
 
 
