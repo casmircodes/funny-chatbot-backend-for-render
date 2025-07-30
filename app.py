@@ -117,7 +117,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-
+'''
 
 
 
@@ -266,7 +266,7 @@ SYSTEM_PROMPT = {
 # 🔒 Shared lock to control access
 chat_lock = threading.Lock()
 
-@app.route("/chat", methods=["POST"])
+#@app.route("/chat", methods=["POST"])
 def chat():
     if not chat_lock.acquire(timeout=30):  # Wait up to 30 seconds
         return jsonify({"reply": "The server is busy. Please try again shortly.", "history": []}), 429
