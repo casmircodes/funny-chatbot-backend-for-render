@@ -10,7 +10,15 @@ import time
 import threading
 
 app = Flask(__name__)
-CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your frontend
+CORS(app, origins=["https://funnychatbot.netlify.app"]) 
+
+ind = 0
+
+keys = [os.environ.get("GOOGLE_API_KEY"), os.environ.get("GOOGLE_API_KEY1"), os.environ.get("GOOGLE_API_KEY2"), os.environ.get("GOOGLE_API_KEY3"), os.environ.get("GOOGLE_API_KEY4"), os.environ.get("GOOGLE_API_KEY5"), os.environ.get("GOOGLE_API_KEY6"), os.environ.get("GOOGLE_API_KEY7"), os.environ.get("GOOGLE_API_KEY8"), os.environ.get("GOOGLE_API_KEY9"), os.environ.get("GOOGLE_API_KEY10")]
+
+# Configure the Gemini API key from the environment variable
+GOOGLE_API_KEY = keys[ind]
+
 
 #GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 GOOGLE_API_KEY = "AIzaSyDif8OlF47rHSVJWuaWSCQh_o5iwti2bBw"
@@ -76,6 +84,28 @@ def chat():
         headers = {
             "Content-Type": "application/json"
         }
+
+
+         global ind
+         global GOOGLE_API_KEY
+            
+         # Add the API key to the request URL.
+         #params = {"key": GOOGLE_API_KEY}
+            
+            
+         if ind != (len(keys) - 1):
+             ind = ind + 1
+         else:
+             ind = 0
+
+
+         GOOGLE_API_KEY = keys[ind]
+
+
+
+
+
+        
 
         response = requests.post(GEMINI_URL, headers=headers, data=json.dumps(payload))
         response.raise_for_status()
