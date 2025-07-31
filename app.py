@@ -88,20 +88,20 @@ def chat():
         }
 
 
-         global ind
-         global GOOGLE_API_KEY
+        global ind
+        global GOOGLE_API_KEY
             
-         # Add the API key to the request URL.
-         #params = {"key": GOOGLE_API_KEY}
+        # Add the API key to the request URL.
+        #params = {"key": GOOGLE_API_KEY}
             
             
-         if ind != (len(keys) - 1):
-             ind = ind + 1
-         else:
-             ind = 0
+        if ind != (len(keys) - 1):
+            ind = ind + 1
+        else:
+            ind = 0
 
 
-         GOOGLE_API_KEY = keys[ind]
+        GOOGLE_API_KEY = keys[ind]
 
 
 
