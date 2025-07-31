@@ -75,7 +75,9 @@ def chat():
             "role": "user",
             "parts": [{"text": user_input}]
         })
-        print(gemini_history)
+        #print(gemini_history)
+
+        time.sleep(2)  # Optional delay to simulate thinking
 
         payload = {
             "contents": gemini_history
