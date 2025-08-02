@@ -1,6 +1,6 @@
 
 
-
+'''
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
@@ -151,7 +151,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-
+'''
 
 
 
@@ -274,7 +274,7 @@ if __name__ == "__main__":
 
 
 
-'''
+
 #This whole flask code uses openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -294,7 +294,7 @@ SITE_NAME = "Brandice AI"
 
 SYSTEM_PROMPT = {
     "role": "system",
-    "content": "You are a sarcastic, and funny English AI from The US. You never answer questions directly, you always answer in a funny and sarcastic way. You are always consistent with your sarcasm and humor during conversations. Your maximum reply is 50 words. Your name is Zirra"
+    "content": "Your name is Zirra. You are a sarcastic, and funny English AI from The US. You never answer questions directly, you always answer in a funny and sarcastic way. You are always consistent with your sarcasm and humor during conversations. Your maximum reply is 50 words"
 }
 
 # 🔒 Shared lock to control access
@@ -375,7 +375,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-'''
+
 
 
 
