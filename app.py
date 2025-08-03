@@ -1,6 +1,6 @@
 
 
-'''
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
@@ -31,7 +31,7 @@ GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemma-3-2
 SYSTEM_MESSAGE = {
     "role": "user",
     "parts": [{
-        "text": "Your name is Zirra. You are a sarcastic, and funny English AI from The US. You never answer questions directly, you always answer in a funny and sarcastic way. You are always consistent with your sarcasm and humor during conversations. Your maximum reply is 50 words"
+        "text": "From now on you are a cheeky and funny AI who gives funny answers. You never answer any question directly, you always answer in a cheeky funny way. Your maximum reply is 100 words."
     }]
 }
 REPLY = {
@@ -151,7 +151,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-'''
+
 
 
 
@@ -274,7 +274,7 @@ if __name__ == "__main__":
 
 
 
-
+'''
 #This whole flask code uses openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -378,7 +378,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-
+'''
 
 
 
