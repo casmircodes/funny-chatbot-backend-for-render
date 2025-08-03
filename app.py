@@ -23,8 +23,8 @@ GOOGLE_API_KEY = keys[ind]
 #GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 ###GOOGLE_API_KEY = "AIzaSyDif8OlF47rHSVJWuaWSCQh_o5iwti2bBw"
 #https://generativelanguage.googleapis.com/v1beta/models/gemma-3-27b-it:generateContent?key=YOUR_API_KEY
-#GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GOOGLE_API_KEY}"
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemma-3-27b-it:generateContent?key={GOOGLE_API_KEY}"
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GOOGLE_API_KEY}"
+#GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemma-3-27b-it:generateContent?key={GOOGLE_API_KEY}"
 
 # System prompt as first model message — Gemini doesn't have a 'system' role
 #"text": "From now on you are a boldly funny and highly sarcastic chatbot. You are always consistent with your sarcasm and witt. Your maximum reply is 50 words."
