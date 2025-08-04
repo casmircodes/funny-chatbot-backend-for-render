@@ -285,7 +285,7 @@ import time
 import threading
 
 app = Flask(__name__)
-CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your real frontend
+CORS(app, origins=["https://funnychatbot.netlify.app", "https://botiverse.xyz"])  # Replace with your real frontend
 
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 REFERER = "https://your-frontend-site.netlify.app"
