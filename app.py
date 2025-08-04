@@ -325,10 +325,12 @@ def chat():
         #"model": "meta-llama/llama-3.1-405b-instruct:free"
         #meta-llama/llama-3.3-70b-instruct
         #meta-llama/llama-3.3-70b-instruct:free
+        #qwen/qwen-2.5-72b-instruct
+        #qwen/qwen3-coder:free
         
 
         payload = {
-            "model": "qwen/qwen3-coder:free",
+            "model": "qwen/qwen-2.5-72b-instruct",
             "messages": history
         }
 
