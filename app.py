@@ -318,7 +318,7 @@ def chat():
             "content": [{"type": "text", "text": user_input}]
         })
 
-        time.sleep(20)  # Simulate a long task
+        time.sleep(5)  # Simulate a long task
         
         #"model": "google/gemma-3-27b-it:free"
         #The traffic to this below 405b parameter model will likley be more on Openrouter
