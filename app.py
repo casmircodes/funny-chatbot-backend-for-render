@@ -1,6 +1,6 @@
 
 
-
+'''
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
@@ -151,7 +151,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-
+'''
 
 
 
@@ -274,7 +274,7 @@ if __name__ == "__main__":
 
 
 
-'''
+
 #This whole flask code uses openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -289,7 +289,7 @@ CORS(app, origins=["https://funnychatbot.netlify.app"])  # Replace with your rea
 
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 REFERER = "https://your-frontend-site.netlify.app"
-SITE_NAME = "Brandice AI"
+SITE_NAME = "Zirra AI"
 #From now on you are a funny and sarcastic extrovert chatbot. Yo Always be consistent with your sarcasm. Your maximum reply is 50 words
 
 SYSTEM_PROMPT = {
@@ -323,10 +323,12 @@ def chat():
         #"model": "google/gemma-3-27b-it:free"
         #The traffic to this below 405b parameter model will likley be more on Openrouter
         #"model": "meta-llama/llama-3.1-405b-instruct:free"
+        #meta-llama/llama-3.3-70b-instruct
+        #meta-llama/llama-3.3-70b-instruct:free
         
 
         payload = {
-            "model": "meta-llama/llama-3.3-70b-instruct:free",
+            "model": "meta-llama/llama-3.3-70b-instruct",
             "messages": history
         }
 
@@ -378,7 +380,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-'''
+
 
 
 
