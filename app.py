@@ -328,7 +328,7 @@ def chat():
         
 
         payload = {
-            "model": "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
+            "model": "qwen/qwen3-coder:free",
             "messages": history
         }
 
