@@ -1,4 +1,103 @@
 
+#This whole code uses gemini API unlike the preevious comented ones that each use gemini API and openrouter API
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import requests
+import json
+import os
+import time
+import threading
+
+app = Flask(__name__)
+CORS(app, origins=["https://funnychatbot.netlify.app", "https://botiverse.xyz"])
+
+CEREBRAS_API_KEY = os.environ.get("CEREBRAS_API_KEY")
+SITE_NAME = "Zirra AI"
+
+SYSTEM_PROMPT = {
+    "role": "system",
+    "content": "From now on you are a cheeky and funny AI who gives funny answers. You never answer any question directly, you always answer in a cheeky funny way. Your maximum reply is 100 words."
+}
+
+chat_lock = threading.Lock()
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    if not chat_lock.acquire(timeout=30):
+        return jsonify({"reply": "The server is busy. Please try again shortly.", "history": []}), 429
+
+    try:
+        data = request.get_json()
+        user_input = data.get("user_input", "")
+        history = data.get("history", [])
+
+        if not history:
+            history = [SYSTEM_PROMPT]
+
+        history.append({
+            "role": "user",
+            "content": user_input  # Cerebras doesn't use {"type": "text"} format
+        })
+
+        time.sleep(5)  # Simulate long task
+
+        payload = {
+            "model": "qwen-3-coder-480b",
+            "stream": False,  # Set to False since we're handling sync replies
+            "max_tokens": 40000,
+            "temperature": 0.7,
+            "top_p": 0.8,
+            "messages": history
+        }
+
+        headers = {
+            "Authorization": f"Bearer {CEREBRAS_API_KEY}",
+            "Content-Type": "application/json"
+        }
+
+        response = requests.post(
+            "https://api.cerebras.ai/v1/chat/completions",
+            headers=headers,
+            data=json.dumps(payload)
+        )
+
+        response_data = response.json()
+        ai_reply = response_data["choices"][0]["message"]
+
+        history.append(ai_reply)
+
+        return jsonify({
+            "reply": ai_reply["content"],
+            "history": history
+        })
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"reply": "Something went wrong", "history": []})
+
+    finally:
+        chat_lock.release()
+
+
+@app.route("/waiting", methods=["GET"])
+def waiting():
+    return jsonify({"status": "busy" if chat_lock.locked() else "ready"})
+
+
+@app.route("/", methods=["GET"])
+def health_check():
+    return jsonify({"status": "API is live"})
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+
+
+
+
 
 '''
 from flask import Flask, request, jsonify
@@ -274,7 +373,7 @@ if __name__ == "__main__":
 
 
 
-
+'''
 #This whole flask code uses openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -382,7 +481,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-
+'''
 
 
 
