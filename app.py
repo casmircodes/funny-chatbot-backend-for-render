@@ -432,7 +432,7 @@ def chat():
         
 
         payload = {
-            "model": "qwen/qwen3-coder",
+            "model": "qwen/qwen3-coder:free",
             "messages": history
         }
 
