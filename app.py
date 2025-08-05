@@ -45,8 +45,8 @@ def chat():
             "model": "qwen-3-coder-480b",
             "stream": False,  # Set to False since we're handling sync replies
             "max_tokens": 40000,
-            "temperature": 0.7,
-            "top_p": 0.8,
+            "temperature": 1.000,
+            "top_p": 1.000,
             "messages": history
         }
 
