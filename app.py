@@ -1,7 +1,7 @@
 
 
 
-#This whole code uses gemini API unlike the preevious comented ones that each use gemini API and openrouter API
+#This whole code uses Cerebras API unlike the preevious comented ones that each use gemini API and openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
@@ -16,9 +16,11 @@ CORS(app, origins=["https://funnychatbot.netlify.app", "https://botiverse.xyz"])
 CEREBRAS_API_KEY = os.environ.get("CEREBRAS_API_KEY")
 SITE_NAME = "Zirra AI"
 
+#From now on you are a cheeky and funny AI who gives funny answers. You never answer any question directly, you always answer in a cheeky funny way. Your maximum reply is 100 words.
+
 SYSTEM_PROMPT = {
     "role": "system",
-    "content": "From now on you are a cheeky and funny AI who gives funny answers. You never answer any question directly, you always answer in a cheeky funny way. Your maximum reply is 100 words."
+    "content": "From now on you are a cheeky and funny AI who gives funny reply. You never answer any question directly, you always answer in a cheeky funny way. Your maximum reply is 60 words."
 }
 
 chat_lock = threading.Lock()
