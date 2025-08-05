@@ -1,6 +1,6 @@
 
 
-'''
+
 #This whole code uses gemini API unlike the preevious comented ones that each use gemini API and openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -44,11 +44,11 @@ def chat():
         time.sleep(5)  # Simulate long task
 
         payload = {
-            "model": "qwen-3-coder-480b",
+            "model": "llama-3.3-70b",
             "stream": False,  # Set to False since we're handling sync replies
-            "max_tokens": 40000,
-            "temperature": 0.9,
-            "top_p": 0.9,
+            "max_tokens": 2048,
+            "temperature": 1.5,
+            "top_p": 1,
             "messages": history
         }
 
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 
-'''
+
 
 
 
@@ -375,7 +375,7 @@ if __name__ == "__main__":
 
 
 
-
+'''
 #This whole flask code uses openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -484,7 +484,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-
+'''
 
 
 
