@@ -1,4 +1,6 @@
 
+
+'''
 #This whole code uses gemini API unlike the preevious comented ones that each use gemini API and openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -93,7 +95,7 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 
-
+'''
 
 
 
@@ -373,7 +375,7 @@ if __name__ == "__main__":
 
 
 
-'''
+
 #This whole flask code uses openrouter API
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -426,10 +428,11 @@ def chat():
         #meta-llama/llama-3.3-70b-instruct:free
         #qwen/qwen-2.5-72b-instruct
         #qwen/qwen3-coder:free
+        #qwen/qwen-2.5-72b-instruct
         
 
         payload = {
-            "model": "qwen/qwen-2.5-72b-instruct",
+            "model": "qwen/qwen3-coder",
             "messages": history
         }
 
@@ -481,7 +484,7 @@ def health_check():
 if __name__ == "__main__":
     app.run(debug=True)
 
-'''
+
 
 
 
