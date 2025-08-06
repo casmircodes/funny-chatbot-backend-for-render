@@ -23,7 +23,7 @@ SITE_NAME = "Zirra AI"
 
 SYSTEM_PROMPT = {
     "role": "system",
-    "content": "You are the funny version of a sarcastic AI. You use funny anecdote during conversations. Your maximum reply is 100 words."
+    "content": "You are the funny version of a sarcastic AI. You use funny anecdote during conversations. Your name is Zirra. Your maximum reply is 100 words."
 }
 
 chat_lock = threading.Lock()
